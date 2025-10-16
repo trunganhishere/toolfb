@@ -314,11 +314,6 @@ new Thread(() -> {
         loginButton.click();
     } catch (Exception e) {
         e.printStackTrace();
-        try {
-            if (driver != null) {
-                try { if (!driver.getWindowHandles().isEmpty()){ driver.quit(); driver1.quit();} } catch (Exception ignored) {}
-            }
-        } catch (Exception ignored) {}
     }
 }).start();
 
@@ -362,11 +357,6 @@ String finalPasswordEmail = "Changer2409@";
 //        button1.click();
     } catch (Exception e) {
         e.printStackTrace();
-        try {
-            if (driver1 != null) {
-                try { if (!driver1.getWindowHandles().isEmpty()){ driver.quit(); driver1.quit();} } catch (Exception ignored) {}
-            }
-        } catch (Exception ignored) {}
     }
 }).start();
 }else{
