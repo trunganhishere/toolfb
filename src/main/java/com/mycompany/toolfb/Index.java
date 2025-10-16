@@ -12,20 +12,31 @@ import org.openqa.selenium.edge.EdgeOptions;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
-
+import java.util.Random;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import java.util.List;
+import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author duong
  */
 public class Index extends javax.swing.JFrame {
-
+public static Double usernameValue = 0.0;
+public static String passValue = "";
+public static String oldEmail = "";
+public static String newEmail = "";
     /**
      * Creates new form Index
      */
@@ -49,6 +60,10 @@ public class Index extends javax.swing.JFrame {
         rowIndex = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        btnCoppy2fa = new javax.swing.JButton();
+        btnCoppyOldMail = new javax.swing.JButton();
+        btnCoppyNewMail = new javax.swing.JButton();
+        btnCoppyLinkAddMail = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,45 +95,89 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
+        btnCoppy2fa.setText("Coppy 2FA");
+        btnCoppy2fa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCoppy2faActionPerformed(evt);
+            }
+        });
+
+        btnCoppyOldMail.setText("Coppy Old Email");
+        btnCoppyOldMail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCoppyOldMailActionPerformed(evt);
+            }
+        });
+
+        btnCoppyNewMail.setText("Coppy New Email");
+        btnCoppyNewMail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCoppyNewMailActionPerformed(evt);
+            }
+        });
+
+        btnCoppyLinkAddMail.setText("Coppy Link Add Mail");
+        btnCoppyLinkAddMail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCoppyLinkAddMailActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(rowIndex, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                                .addComponent(jButton1)))))
-                .addGap(24, 24, 24))
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1)
+                            .addComponent(btnCoppy2fa))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCoppyLinkAddMail)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(btnCoppyOldMail)
+                                .addComponent(btnCoppyNewMail)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jLabel1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCoppy2fa)
+                            .addComponent(btnCoppyLinkAddMail))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(rowIndex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(36, Short.MAX_VALUE))
+                    .addComponent(jButton3)
+                    .addComponent(btnCoppyOldMail))
+                .addGap(18, 18, 18)
+                .addComponent(btnCoppyNewMail)
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         pack();
@@ -126,15 +185,298 @@ public class Index extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String rowId = rowIndex.getText().trim();
+        if (!rowId.matches("\\d+")) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
+            return;
+        }
+int index = Integer.parseInt(rowId);
+
+Properties props = new Properties();
+try (InputStream input = new FileInputStream("config.properties")) {
+    props.load(input);
+
+    // Lấy đường dẫn file Excel từ config
+    String excelPath = props.getProperty("excel.path");
+    if (excelPath == null || excelPath.isEmpty()) {
+        throw new FileNotFoundException("Không tìm thấy cấu hình excel.path trong config.properties");
+    }
+
+    File excelFile = new File(excelPath);
+    if (!excelFile.isAbsolute()) {
+        // Nếu chỉ nhập tên file thì tự lấy từ thư mục chứa .jar
+        excelFile = new File(System.getProperty("user.dir"), excelPath);
+    }
+    if (!excelFile.exists()) {
+        throw new FileNotFoundException("Không tìm thấy file Excel: " + excelFile.getAbsolutePath());
+    }
+
+    try (FileInputStream fis = new FileInputStream(excelFile);
+        Workbook workbook = new XSSFWorkbook(fis)) {
+
+        Sheet sheet = workbook.getSheetAt(0);
+        if (index - 1 < 0 || index - 1 >= sheet.getLastRowNum()) {
+            JOptionPane.showMessageDialog(this, "Dòng không hợp lệ.");
+            return;
+        }
+
+        Row row = sheet.getRow(index - 1);
+        if (row == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy dòng.");
+            return;
+        }
+
+        for (Cell cell : row) {
+            switch (cell.getColumnIndex()) {
+                case 0 -> usernameValue = cell.getNumericCellValue();
+                case 1 -> passValue = cell.getStringCellValue();
+                case 3 -> oldEmail = cell.getStringCellValue();
+                case 4 -> newEmail = cell.getStringCellValue();
+            }
+        }
+        
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+    return;
+}
+DecimalFormat df = new DecimalFormat("#");
+String finalEmailValue = df.format(usernameValue);
+String finalPassValue = passValue;
+// Lấy đường dẫn ChromeDriver từ config
+String chromeDriverPath = props.getProperty("chrome.driver");
+if (chromeDriverPath == null || chromeDriverPath.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Không tìm thấy cấu hình chrome.driver trong config.properties");
+    return;
+}
+
+File driverFile = new File(chromeDriverPath);
+if (!driverFile.isAbsolute()) {
+    driverFile = new File(System.getProperty("user.dir"), chromeDriverPath);
+}
+if (!driverFile.exists()) {
+    JOptionPane.showMessageDialog(this, "Không tìm thấy ChromeDriver: " + driverFile.getAbsolutePath());
+    return;
+}
+
+System.setProperty("webdriver.chrome.driver", driverFile.getAbsolutePath());
+
+// Nếu muốn giả lập mobile
+//Map<String, String> mobileEmulation = new HashMap<>();
+//mobileEmulation.put("deviceName", "iPhone X");
+
+ChromeOptions options = new ChromeOptions();
+options.addArguments("profile-directory=Default"); // hoặc "Profile 1"
+
+//options.setExperimentalOption("mobileEmulation", mobileEmulation);
+        try {
+            FileInputStream fis = new FileInputStream("config.properties");
+        props.load(fis);
+
+        // Lấy đường dẫn từ key useragent.path
+        String userAgentFile = props.getProperty("useragent.path");
+
+        // Đọc file useragent.txt (theo giá trị trong config)
+        List<String> lsAguments = Files.readAllLines(Paths.get(userAgentFile));
+        // Thêm tất cả vào ArrayList
+        Random rand = new Random();
+        String randomUA = lsAguments.get(rand.nextInt(lsAguments.size()));
+        options.addArguments("--user-agent=" + randomUA);
+        } catch (Exception e) {
+        e.printStackTrace();
+        }
+        // In ra kiểm tra
+
+//create driver
+ChromeDriver driver = new ChromeDriver(options);
+driver.manage().window().setSize(new org.openqa.selenium.Dimension(550, 780));
+
+//create diver1
+ChromeOptions options1 = new ChromeOptions();
+options1.addArguments("profile-directory=Default");
+ChromeDriver driver1 = new ChromeDriver(options1);
+driver1.manage().window().setSize(new org.openqa.selenium.Dimension(850, 780));
+// Thread đăng nhập Facebook
+new Thread(() -> {
+    try {
+        driver.navigate().to("https://www.facebook.com/");
+//        WebElement emailInput = driver.findElement(By.id("email"));
+
+// Lấy ô mật khẩu
+//WebElement passwordInput = driver.findElement(By.id("pass"));
+
+// Lấy nút đăng nhập
+//WebElement loginButton = driver.findElement(By.name("login"));
+        WebElement emailInput = driver.findElement(By.name("email"));
+        emailInput.sendKeys(finalEmailValue);
+        WebElement passwordInput = driver.findElement(By.name("pass"));
+        passwordInput.sendKeys(finalPassValue);
+        WebElement loginButton = driver.findElement(By.xpath("//div[@aria-label='Đăng nhập']"));
+        loginButton.click();
+    } catch (Exception e) {
+        e.printStackTrace();
+        try {
+            if (driver != null) {
+                try { if (!driver.getWindowHandles().isEmpty()){ driver.quit(); driver1.quit();} } catch (Exception ignored) {}
+            }
+        } catch (Exception ignored) {}
+    }
+}).start();
+
+//thread kiem tra duong dan
+new Thread(() -> {
+    try {
+        while (true) {
+            String currentUrl = driver.getCurrentUrl();
+
+        if (currentUrl.equals("https://m.facebook.com/?deoia=1") || currentUrl.equals("https://m.facebook.com/login/save-device")) {
+            // Redirect sang link khác
+            driver.navigate().to("https://accountscenter.facebook.com/personal_info/contact_points/?contact_point_type=email&dialog_type=add_contact_point");
+            break;
+        }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}).start();
+
+if (oldEmail.contains("@mail.com")){
+// Thread đăng nhập Mail
+new Thread(() -> {
+String finalEmail = oldEmail;
+String finalPasswordEmail = "Changer2409@";
+    try {
+        driver1.navigate().to("https://www.mail.com/#.23140-header-navlogin2-1");
+//        driver1.navigate().to("https://www.guerrillamail.com/");
+        
+//        WebElement span = driver1.findElement(By.className("editable"));
+//        span.click();
+        WebElement email1 = driver1.findElement(By.id("login-email"));
+//        WebElement email1 = driver1.findElement(By.cssSelector("#inbox-id input[type='text']"));
+        email1.sendKeys(finalEmail);
+        WebElement passEmail = driver1.findElement(By.id("login-password"));
+        passEmail.sendKeys(finalPasswordEmail);
+        WebElement loginButton = driver1.findElement(By.cssSelector("button.btn.btn-block.login-submit"));
+        loginButton.click();
+
+//        WebElement button1 = driver1.findElement(By.cssSelector("button.save.button.small"));
+//        button1.click();
+    } catch (Exception e) {
+        e.printStackTrace();
+        try {
+            if (driver1 != null) {
+                try { if (!driver1.getWindowHandles().isEmpty()){ driver.quit(); driver1.quit();} } catch (Exception ignored) {}
+            }
+        } catch (Exception ignored) {}
+    }
+}).start();
+}else{
+    driver1.quit();
+}
+
+//thread tu dong dong chuong trinh
+new Thread(() -> {
+            try {
+                Thread.sleep(300000);
+                driver.close();
+                driver1.close();
+            } catch (InterruptedException e) {
+            }
+    }).start();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String index = rowIndex.getText();
+        if(!index.matches("\\d+") || Integer.valueOf(index) <=0 ){
+            JOptionPane.showMessageDialog(this, "Kí tự trong ô không phải số!");
+        }else{
+            int idx = Integer.valueOf(index)-1;
+            rowIndex.setText(String.valueOf(idx));
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String index = rowIndex.getText();
+        if(!index.matches("\\d+")){
+            JOptionPane.showMessageDialog(this, "Kí tự trong ô không phải số!");
+        }else{
+            int idx = Integer.valueOf(index)+1;
+            rowIndex.setText(String.valueOf(idx));
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnCoppy2faActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoppy2faActionPerformed
+        // TODO add your handling code here:
+        String rowId = rowIndex.getText().trim();
 if (!rowId.matches("\\d+")) {
     JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
     return;
 }
 
-String emailValue = "";
-String passValue = "";
-String email = "";
-String passwordEmail = "";
+String faNumber = "";
+//String passwordEmail = "";
+int index = Integer.parseInt(rowId);
+
+Properties props = new Properties();
+try (InputStream input = new FileInputStream("config.properties")) {
+    props.load(input);
+
+    // Lấy đường dẫn file Excel từ config
+    String excelPath = props.getProperty("excel.path");
+    if (excelPath == null || excelPath.isEmpty()) {
+        throw new FileNotFoundException("Không tìm thấy cấu hình excel.path trong config.properties");
+    }
+
+    File excelFile = new File(excelPath);
+    if (!excelFile.isAbsolute()) {
+        // Nếu chỉ nhập tên file thì tự lấy từ thư mục chứa .jar
+        excelFile = new File(System.getProperty("user.dir"), excelPath);
+    }
+    if (!excelFile.exists()) {
+        throw new FileNotFoundException("Không tìm thấy file Excel: " + excelFile.getAbsolutePath());
+    }
+
+    try (FileInputStream fis = new FileInputStream(excelFile);
+         Workbook workbook = new XSSFWorkbook(fis)) {
+
+        Sheet sheet = workbook.getSheetAt(0);
+        if (index - 1 < 0 || index - 1 >= sheet.getLastRowNum()) {
+            JOptionPane.showMessageDialog(this, "Dòng không hợp lệ.");
+            return;
+        }
+
+        Row row = sheet.getRow(index - 1);
+        if (row == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy dòng.");
+            return;
+        }
+        for (Cell cell : row) {
+            switch (cell.getColumnIndex()) {
+                case 2 -> faNumber = cell.getStringCellValue();
+                }
+            }
+    }
+} catch (Exception e) {
+    e.printStackTrace();
+    return;
+}
+        
+        // Đưa vào bộ nhớ tạm (Clipboard)
+        StringSelection selection = new StringSelection(faNumber);
+        Toolkit.getDefaultToolkit()
+               .getSystemClipboard()
+               .setContents(selection, null);
+    }//GEN-LAST:event_btnCoppy2faActionPerformed
+
+    private void btnCoppyOldMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoppyOldMailActionPerformed
+        // TODO add your handling code here:
+        String rowId = rowIndex.getText().trim();
+if (!rowId.matches("\\d+")) {
+    JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
+    return;
+}
+
+String oldEmail = "";
+//String passwordEmail = "";
 int index = Integer.parseInt(rowId);
 
 Properties props = new Properties();
@@ -173,135 +515,100 @@ try (InputStream input = new FileInputStream("config.properties")) {
 
         for (Cell cell : row) {
             switch (cell.getColumnIndex()) {
-                case 0 -> emailValue = cell.getStringCellValue();
-                case 2 -> passValue = cell.getStringCellValue();
-                case 1 -> passwordEmail = cell.getStringCellValue();
+                case 3 -> oldEmail = cell.getStringCellValue();
+                }
             }
+        String oldEmailPaste = "";
+        if (oldEmail.contains("pokemail.net")) {
+            oldEmailPaste = oldEmail.split("@")[0];
+        }else{
+            oldEmailPaste = oldEmail;
         }
-    }
+        // Đưa vào bộ nhớ tạm (Clipboard)
+        StringSelection selection = new StringSelection(oldEmailPaste);
+        Toolkit.getDefaultToolkit()
+               .getSystemClipboard()
+               .setContents(selection, null);
+        }
 } catch (Exception e) {
     e.printStackTrace();
+}
+    }//GEN-LAST:event_btnCoppyOldMailActionPerformed
+
+    private void btnCoppyNewMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoppyNewMailActionPerformed
+        String rowId = rowIndex.getText().trim();
+if (!rowId.matches("\\d+")) {
+    JOptionPane.showMessageDialog(this, "Vui lòng nhập số");
     return;
 }
 
-// Lấy đường dẫn EdgeDriver từ config
-String edgeDriverPath = props.getProperty("edge.driver");
-if (edgeDriverPath == null || edgeDriverPath.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Không tìm thấy cấu hình edge.driver trong config.properties");
-    return;
-}
+String newEmail = "";
+//String passwordEmail = "";
+int index = Integer.parseInt(rowId);
 
-File driverFile = new File(edgeDriverPath);
-if (!driverFile.isAbsolute()) {
-    driverFile = new File(System.getProperty("user.dir"), edgeDriverPath);
-}
-if (!driverFile.exists()) {
-    JOptionPane.showMessageDialog(this, "Không tìm thấy EdgeDriver: " + driverFile.getAbsolutePath());
-    return;
-}
+Properties props = new Properties();
+try (InputStream input = new FileInputStream("config.properties")) {
+    props.load(input);
 
-System.setProperty("webdriver.edge.driver", driverFile.getAbsolutePath());
-
-Map<String, String> mobileEmulation = new HashMap<>();
-mobileEmulation.put("deviceName", "iPhone X");
-
-EdgeOptions options = new EdgeOptions();
-options.setExperimentalOption("mobileEmulation", mobileEmulation);
-EdgeOptions options1 = new EdgeOptions();
-
-EdgeDriver driver1 = new EdgeDriver(options1);
-EdgeDriver driver = new EdgeDriver(options);
-driver.manage().window().setSize(new org.openqa.selenium.Dimension(350, 730));
-driver1.manage().window().setSize(new org.openqa.selenium.Dimension(750, 730));
-
-// Thread đăng nhập Facebook
-String finalEmailValue = emailValue;
-String finalPassValue = passValue;
-Thread thread1 = new Thread(() -> {
-    try {
-        driver.navigate().to("https://www.facebook.com/");
-        WebElement emailFB = driver.findElement(By.name("email"));
-        emailFB.sendKeys(finalEmailValue);
-        WebElement pass = driver.findElement(By.name("pass"));
-        pass.sendKeys(finalPassValue);
-        WebElement loginButton = driver.findElement(By.xpath("//div[@aria-label='Đăng nhập']"));
-        loginButton.click();
-        Thread.sleep(10000);
-        ((JavascriptExecutor) driver).executeScript("window.open('https://accountscenter.facebook.com/password_and_security/two_factor', '_blank');");
-    } catch (Exception e) {
-        e.printStackTrace();
-        try {
-            if (driver != null) {
-                try { if (!driver.getWindowHandles().isEmpty()) driver.quit(); } catch (Exception ignored) {}
-            }
-            if (driver1 != null) {
-                try { if (!driver1.getWindowHandles().isEmpty()) driver1.quit(); } catch (Exception ignored) {}
-            }
-        } catch (Exception ignored) {}
+    // Lấy đường dẫn file Excel từ config
+    String excelPath = props.getProperty("excel.path");
+    if (excelPath == null || excelPath.isEmpty()) {
+        throw new FileNotFoundException("Không tìm thấy cấu hình excel.path trong config.properties");
     }
-});
 
-// Thread đăng nhập Mail
-String finalEmail = emailValue;
-String finalPasswordEmail = passwordEmail;
-Thread thread2 = new Thread(() -> {
-    try {
-        driver1.navigate().to("https://www.mail.com/#.23140-header-navlogin2-1");
-        WebElement email1 = driver1.findElement(By.id("login-email"));
-        email1.sendKeys(finalEmail);
-        WebElement passEmail = driver1.findElement(By.id("login-password"));
-        passEmail.sendKeys(finalPasswordEmail);
-        WebElement loginButton1 = driver1.findElement(By.cssSelector(".btn.btn-block.login-submit"));
-        loginButton1.click();
-    } catch (Exception e) {
-        e.printStackTrace();
-        try {
-            if (driver != null) {
-                try { if (!driver.getWindowHandles().isEmpty()) driver.quit(); } catch (Exception ignored) {}
-            }
-            if (driver1 != null) {
-                try { if (!driver1.getWindowHandles().isEmpty()) driver1.quit(); } catch (Exception ignored) {}
-            }
-        } catch (Exception ignored) {}
+    File excelFile = new File(excelPath);
+    if (!excelFile.isAbsolute()) {
+        // Nếu chỉ nhập tên file thì tự lấy từ thư mục chứa .jar
+        excelFile = new File(System.getProperty("user.dir"), excelPath);
     }
-});
+    if (!excelFile.exists()) {
+        throw new FileNotFoundException("Không tìm thấy file Excel: " + excelFile.getAbsolutePath());
+    }
 
-try {
-    System.out.println("fb" + finalEmailValue);
-    System.out.println("pass fb" + finalPassValue);
-    System.out.println("em" + finalEmail);
-    System.out.println("pass em" + finalPasswordEmail);
+    try (FileInputStream fis = new FileInputStream(excelFile);
+         Workbook workbook = new XSSFWorkbook(fis)) {
 
-    thread2.start();
-    thread1.start();
-    thread1.join();
-    thread2.join();
+        Sheet sheet = workbook.getSheetAt(0);
+        if (index - 1 < 0 || index - 1 >= sheet.getLastRowNum()) {
+            JOptionPane.showMessageDialog(this, "Dòng không hợp lệ.");
+            return;
+        }
+
+        Row row = sheet.getRow(index - 1);
+        if (row == null) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy dòng.");
+            return;
+        }
+
+        for (Cell cell : row) {
+            switch (cell.getColumnIndex()) {
+                case 4 -> newEmail = cell.getStringCellValue();
+                }
+            }
+        String newEmailPaste = "";
+        if (newEmail.contains("pokemail.net")) {
+            newEmailPaste = newEmail.split("@")[0];
+        }else{
+            newEmailPaste = newEmail;
+        }
+        // Đưa vào bộ nhớ tạm (Clipboard)
+        StringSelection selection = new StringSelection(newEmailPaste);
+        Toolkit.getDefaultToolkit()
+               .getSystemClipboard()
+               .setContents(selection, null);
+        }
 } catch (Exception e) {
     e.printStackTrace();
-    JOptionPane.showMessageDialog(this, e.getMessage());
 }
+    }//GEN-LAST:event_btnCoppyNewMailActionPerformed
 
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String index = rowIndex.getText();
-        if(!index.matches("\\d+") || Integer.valueOf(index) <=0 ){
-            JOptionPane.showMessageDialog(this, "Kí tự trong ô không phải số!");
-        }else{
-            int idx = Integer.valueOf(index)-1;
-            rowIndex.setText(String.valueOf(idx));
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String index = rowIndex.getText();
-        if(!index.matches("\\d+")){
-            JOptionPane.showMessageDialog(this, "Kí tự trong ô không phải số!");
-        }else{
-            int idx = Integer.valueOf(index)+1;
-            rowIndex.setText(String.valueOf(idx));
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btnCoppyLinkAddMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCoppyLinkAddMailActionPerformed
+        // TODO add your handling code here:
+        StringSelection selection = new StringSelection("https://accountscenter.facebook.com/personal_info/contact_points/?contact_point_type=email&dialog_type=add_contact_point");
+        Toolkit.getDefaultToolkit()
+               .getSystemClipboard()
+               .setContents(selection, null);
+    }//GEN-LAST:event_btnCoppyLinkAddMailActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,6 +646,10 @@ try {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCoppy2fa;
+    private javax.swing.JButton btnCoppyLinkAddMail;
+    private javax.swing.JButton btnCoppyNewMail;
+    private javax.swing.JButton btnCoppyOldMail;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
